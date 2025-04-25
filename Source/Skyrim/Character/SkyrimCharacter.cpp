@@ -3,22 +3,20 @@
 
 #include "SkyrimCharacter.h"
 
+#include "SkyrimPawnExtensionComponent.h"
+
 ASkyrimCharacter::ASkyrimCharacter()
 {
-	PrimaryActorTick.bCanEverTick = true;
-
+	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bStartWithTickEnabled = false;
+	
+	PawnExtComponent = CreateDefaultSubobject<USkyrimPawnExtensionComponent>(TEXT("PawnExtenstionComponent"));
 }
 
 void ASkyrimCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-}
-
-void ASkyrimCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 }
 
 void ASkyrimCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

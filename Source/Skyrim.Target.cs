@@ -10,6 +10,6 @@ public class SkyrimTarget : TargetRules
 		Type = TargetType.Game;
 		DefaultBuildSettings = BuildSettingsVersion.V5;
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_5;
-		ExtraModuleNames.Add("Skyrim");
+		ExtraModuleNames.AddRange(new string[] { "Skyrim" });
 	}
 }
