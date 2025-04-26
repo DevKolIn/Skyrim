@@ -6,6 +6,7 @@
 #include "SkyrimCharacter.generated.h"
 
 class USkyrimPawnExtensionComponent;
+class USkyrimCameraComponent;
 
 UCLASS()
 class SKYRIM_API ASkyrimCharacter : public ACharacter
@@ -23,6 +24,9 @@ public:
 
 /*  */
 private:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Lyra|Character", Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Skyrim|Character", Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<USkyrimPawnExtensionComponent> PawnExtComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Skyrim|Character", Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USkyrimCameraComponent> CameraComponent;
 };

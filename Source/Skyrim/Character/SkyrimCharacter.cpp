@@ -4,6 +4,7 @@
 #include "SkyrimCharacter.h"
 
 #include "SkyrimPawnExtensionComponent.h"
+#include "Skyrim/Camera/SkyrimCameraComponent.h"
 
 ASkyrimCharacter::ASkyrimCharacter()
 {
@@ -11,6 +12,11 @@ ASkyrimCharacter::ASkyrimCharacter()
 	PrimaryActorTick.bStartWithTickEnabled = false;
 	
 	PawnExtComponent = CreateDefaultSubobject<USkyrimPawnExtensionComponent>(TEXT("PawnExtenstionComponent"));
+
+	{
+		CameraComponent = CreateDefaultSubobject<USkyrimCameraComponent>(TEXT("CameraComponent"));
+		CameraComponent->SetRelativeLocation(FVector(-300.0f, 0.0f, 75.0f));
+	}
 }
 
 void ASkyrimCharacter::BeginPlay()

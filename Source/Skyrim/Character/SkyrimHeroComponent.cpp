@@ -8,6 +8,7 @@
 #include "Skyrim/Player/SkyrimPlayerController.h"
 #include "Skyrim/Player/SkyrimPlayerState.h"
 #include "Components/GameFrameworkComponentManager.h"
+#include "Skyrim/Camera/SkyrimCameraComponent.h"
 
 const FName USkyrimHeroComponent::NAME_ActorFeatureName("Hero");
 
@@ -49,8 +50,7 @@ void USkyrimHeroComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	Super::EndPlay(EndPlayReason);
 }
 
-bool USkyrimHeroComponent::CanChangeInitState(UGameFrameworkComponentManager* Manager, FGameplayTag CurrentState,
-	FGameplayTag DesiredState) const
+bool USkyrimHeroComponent::CanChangeInitState(UGameFrameworkComponentManager* Manager, FGameplayTag CurrentState, FGameplayTag DesiredState) const
 {
 	check(Manager);
 
@@ -65,7 +65,7 @@ bool USkyrimHeroComponent::CanChangeInitState(UGameFrameworkComponentManager* Ma
 	}
 	else if (CurrentState == SkyrimGameplayTags::InitState_Spawned && DesiredState == SkyrimGameplayTags::InitState_DataAvailable)
 	{
-		if (!GetPlayerState<ASkyrimPlayerState>())
+		if (GetPlayerState<ASkyrimPlayerState>() == nullptr)
 		{
 			return false;
 		}
@@ -123,6 +123,16 @@ void USkyrimHeroComponent::HandleChangeInitState(UGameFrameworkComponentManager*
 		{
 			return;
 		}
+
+		const bool bIsLocallyControlled = Pawn->IsLocallyControlled();
+		// Hook up the delegate for all pawns, in case we spectate later
+		if (bIsLocallyControlled)
+		{
+			if (USkyrimCameraComponent* CameraComponent = USkyrimCameraComponent::FindCameraComponent(Pawn))
+			{
+				CameraComponent->DetermineCameraModeDelegate.BindUObject(this, &ThisClass::DetermineCameraMode);
+			}
+		} 
 	}
 }
 
@@ -144,4 +154,20 @@ void USkyrimHeroComponent::CheckDefaultInitialization()
 
 	// This will try to progress from spawned (which is only set in BeginPlay) through the data initialization stages until it gets to gameplay ready
 	ContinueInitStateChain(StateChain);
+}
+
+TSubclassOf<USkyrimCameraMode> USkyrimHeroComponent::DetermineCameraMode() const
+{
+	const APawn* Pawn = GetPawn<APawn>();
+	if (!Pawn)
+	{
+		return nullptr;
+	}
+
+	if (USkyrimPawnExtensionComponent* PawnExtComp = USkyrimPawnExtensionComponent::FindPawnExtensionComponent(Pawn))
+	{
+		return DefaultCameraMode;
+	}
+
+	return nullptr;
 }

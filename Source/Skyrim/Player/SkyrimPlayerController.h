@@ -13,5 +13,7 @@ UCLASS()
 class SKYRIM_API ASkyrimPlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	
+
+public:
+	ASkyrimPlayerController(const FObjectInitializer& ObjectInitializer);
 };

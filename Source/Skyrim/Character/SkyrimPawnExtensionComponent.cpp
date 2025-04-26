@@ -47,6 +47,7 @@ void USkyrimPawnExtensionComponent::EndPlay(const EEndPlayReason::Type EndPlayRe
 	Super::EndPlay(EndPlayReason);
 }
 
+PRAGMA_DISABLE_OPTIMIZATION
 bool USkyrimPawnExtensionComponent::CanChangeInitState(UGameFrameworkComponentManager* Manager, FGameplayTag CurrentState, FGameplayTag DesiredState) const
 {
 	check(Manager);
@@ -75,7 +76,7 @@ bool USkyrimPawnExtensionComponent::CanChangeInitState(UGameFrameworkComponentMa
 		if (bIsLocallyControlled)
 		{
 			// 컨트롤러에 의해 빙의된 상태인지 확인
-			if (!GetController<AController>())
+			if (GetController<AController>() == nullptr)
 			{
 				return false;
 			}
@@ -90,12 +91,12 @@ bool USkyrimPawnExtensionComponent::CanChangeInitState(UGameFrameworkComponentMa
 	}
 	else if (CurrentState == SkyrimGameplayTags::InitState_DataInitialized && DesiredState == SkyrimGameplayTags::InitState_GameplayReady)
 	{
-		return true;
+		return Manager->HaveAllFeaturesReachedInitState(Pawn, SkyrimGameplayTags::InitState_DataInitialized);
 	}
 
 	return false;
 }
-
+PRAGMA_ENABLE_OPTIMIZATION
 // 다른 컴포넌트의 상태 변경이 감지된 경우 호출됨
 void USkyrimPawnExtensionComponent::OnActorInitStateChanged(const FActorInitStateChangedParams& Params)
 {

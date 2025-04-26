@@ -2,6 +2,7 @@
 
 
 #include "SkyrimGameplayTags.h"
+#include "Engine/EngineTypes.h"
 
 namespace SkyrimGameplayTags
 {

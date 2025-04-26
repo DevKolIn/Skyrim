@@ -6,6 +6,8 @@
 #include "Components/PawnComponent.h"
 #include "SkyrimHeroComponent.generated.h"
 
+class USkyrimCameraMode;
+
 /**
  * 
  */
@@ -34,4 +36,14 @@ public:
 	virtual void CheckDefaultInitialization() override;
 	//~ End IGameFrameworkInitStateInterface interface
 	
+	TSubclassOf<USkyrimCameraMode> DetermineCameraMode() const;
+
+protected:
+	/*// Input configuration used by player controlled pawns to create input mappings and bind input actions.
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Lyra|Input")
+	TObjectPtr<USkyimInputConfig> InputConfig;*/
+
+	// Default camera mode used by player controlled pawns.
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Lyra|Camera")
+	TSubclassOf<USkyrimCameraMode> DefaultCameraMode;
 };
